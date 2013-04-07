@@ -53,6 +53,13 @@ public:
     // SQW/OUT methods.
     static void setSqwOutLevel(uint8_t level);
     static void setSqwOutSignal(Frequencies frequency);
+    
+    // RAM registers read/write methods. Address locations 08h to 3Fh.
+    // Max length = 56 bytes.
+    static uint8_t readByteInRam(uint8_t address);
+    static void readBytesInRam(uint8_t address, uint8_t length, uint8_t* p_data);
+    static void writeByteInRam(uint8_t address, uint8_t data);
+    static void writeBytesInRam(uint8_t address, uint8_t length, uint8_t* p_data);
 };
 
 // RTC using the internal millis() clock, has to be initialized before use

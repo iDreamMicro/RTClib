@@ -41,6 +41,10 @@ setMinute	KEYWORD2
 setSecond	KEYWORD2
 setSqwOutLevel	KEYWORD2
 setSqwOutSignal	KEYWORD2
+readByteInRam	KEYWORD2
+readBytesInRam	KEYWORD2
+writeByteInRam	KEYWORD2
+writeBytesInRam	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

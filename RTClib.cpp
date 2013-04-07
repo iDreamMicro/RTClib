@@ -10,6 +10,7 @@
 
 // DS1307 registers.
 #define DS1307_CONTROL_REGISTER 0x07
+#define DS1307_RAM_REGISTER     0x08
 
 // DS1307 control register bits.
 #define DS1307_RS0  0x00
@@ -221,6 +222,46 @@ void RTC_DS1307::setSqwOutSignal(Frequencies frequency) {
     Wire.endTransmission();
 }
 
+uint8_t RTC_DS1307::readByteInRam(uint8_t address) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.write(address);
+    Wire.endTransmission();
+
+    Wire.requestFrom(DS1307_ADDRESS, 1);
+    uint8_t data = Wire.read();
+    Wire.endTransmission();
+
+    return data;
+}
+
+void RTC_DS1307::readBytesInRam(uint8_t address, uint8_t length, uint8_t* p_data) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.write(address);
+    Wire.endTransmission();
+
+    Wire.requestFrom(DS1307_ADDRESS, (int)length);
+    for (uint8_t i = 0; i < length; i++) {
+        p_data[i] = Wire.read();
+    }
+    Wire.endTransmission();
+}
+
+void RTC_DS1307::writeByteInRam(uint8_t address, uint8_t data) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.write(address);
+  	Wire.write(data);
+    Wire.endTransmission();
+}
+
+void RTC_DS1307::writeBytesInRam(uint8_t address, uint8_t length, uint8_t* p_data) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.write(address);
+  	for (uint8_t i = 0; i < length; i++) {
+  	  	Wire.write(p_data[i]);
+  	}
+    Wire.endTransmission();
+}
+
 #else
 
 uint8_t RTC_DS1307::isrunning(void) {
@@ -293,6 +334,45 @@ void RTC_DS1307::setSqwOutSignal(Frequencies frequency) {
     Wire.beginTransmission(DS1307_ADDRESS);
   	Wire.send(DS1307_CONTROL_REGISTER);	
   	Wire.send(value);
+    Wire.endTransmission();
+}
+uint8_t RTC_DS1307::readByteInRam(uint8_t address) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.send(address);
+    Wire.endTransmission();
+
+    Wire.requestFrom(DS1307_ADDRESS, 1);
+    uint8_t data = Wire.receive();
+    Wire.endTransmission();
+
+    return data;
+}
+
+void RTC_DS1307::readBytesInRam(uint8_t address, uint8_t length, uint8_t* p_data) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.send(address);
+    Wire.endTransmission();
+
+    Wire.requestFrom(DS1307_ADDRESS, (int)length);
+    for (uint8_t i = 0; i < length; i++) {
+        p_data[i] = Wire.receive();
+    }
+    Wire.endTransmission();
+}
+
+void RTC_DS1307::writeByteInRam(uint8_t address, uint8_t data) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.send(address);
+  	Wire.send(data);
+    Wire.endTransmission();
+}
+
+void RTC_DS1307::writeBytesInRam(uint8_t address, uint8_t length, uint8_t* p_data) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.send(address);
+  	for (uint8_t i = 0; i < length; i++) {
+  	  	Wire.send(p_data[i]);
+  	}
     Wire.endTransmission();
 }
 
